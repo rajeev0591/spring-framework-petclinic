@@ -1,0 +1,31 @@
+trigger:
+- none
+
+stages:
+- stage:
+  jobs:
+  - job:
+    pool:
+     vmImage: ubuntu-latest
+    steps:
+    - task: Maven@1
+      displayName: 'Maven $(mavenPOMFile)'
+      inputs:
+        mavenPomFile: Java-SpringBoot-Web/pom.xml
+        testResultsFiles: '**/TEST*.xml'
+
+    - task: CopyFiles@2
+      displayName: 'Copy File to: $(TargetFolder)'
+      inputs:
+        SourceFolder: '$(Build.SourcesDirectory)'
+        Contents: |
+         **/*.war 
+         **/*jar-with-dependencies.jar
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+        flattenFolders: true
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
