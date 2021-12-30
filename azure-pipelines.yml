@@ -11,7 +11,7 @@ stages:
     - task: Maven@1
       displayName: 'Maven $(mavenPOMFile)'
       inputs:
-        mavenPomFile: Java-SpringBoot-Web/pom.xml
+        mavenPomFile: pom.xml
         testResultsFiles: '**/TEST*.xml'
 
     - task: CopyFiles@2
