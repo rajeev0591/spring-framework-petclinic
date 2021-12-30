@@ -29,3 +29,18 @@ stages:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
         ArtifactName: 'drop'
         publishLocation: 'Container'
+
+- stage: "DeployToDev"
+  displayName: "Deploying to Dev Env"
+  jobs:
+  - job:
+    pool:
+     vmImage: ubuntu-latest
+    steps:
+    - task: AzureRmWebAppDeployment@4
+      inputs:
+        ConnectionType: 'AzureRM'
+        azureSubscription: 'Azure Pass - Sponsorship(7a64ff72-0f8c-4445-947b-2c65f88d344b)'
+        appType: 'webAppLinux'
+        WebAppName: 'pet-clinic-java'
+        packageForLinux: '$(Pipeline.Workspace)/**/*.war'
